@@ -45,7 +45,7 @@ for i in data['migrationBundles']['files']:
         print(BOLD+YELLOW+ discription + "("+ filename + ")"+ " not found"+RESET)
         print()
     z=z+1
-''''
+
 #### COMMON BUNDLES######
 z=0
 for i in data['commonBundles']['files']:
@@ -66,7 +66,7 @@ for i in data['commonBundles']['files']:
     z=z+1
 
 
-'''
+
 #### VXRAIL BUNDLES######
 
 if (user_input==1):
