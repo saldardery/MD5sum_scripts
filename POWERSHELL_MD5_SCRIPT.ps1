@@ -12,7 +12,7 @@ $x=3
     }
 Write-Output ""
 
-<# 
+ 
 ##### MIGRATION BUNDLES ##########
 $mig_bundles=$json.migrationBundles.files
 $z=0
@@ -76,7 +76,7 @@ $file_md5sum= Get-FileHash   $filename  -Algorithm MD5 2>&1
 $z=$z+1
 }
 
-#>
+
 
 ##### VXRAIL BUNDLES ##########
 if ($x -eq 1)
