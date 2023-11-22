@@ -1,4 +1,4 @@
-﻿$json = Get-Content -Path $scriptRoot/vcf_transition_file_list.json | ConvertFrom-Json
+﻿$json = Get-Content -Path $PSScriptRoot/vcf_transition_file_list.json | ConvertFrom-Json
 $x=3
 
 
