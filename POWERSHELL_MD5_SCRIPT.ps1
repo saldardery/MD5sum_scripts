@@ -1,5 +1,6 @@
-﻿$json = Get-Content -Path vcf_transition_file_list.json | ConvertFrom-Json
+﻿$json = Get-Content -Path $scriptRoot/vcf_transition_file_list.json | ConvertFrom-Json
 $x=3
+
 
 ###### USER INPUT #######    
  while ($x -ne 1 -and $x -ne 2 )
@@ -12,15 +13,52 @@ $x=3
     }
 Write-Output ""
 
+
+###### Tools ###########
+$tools=$json.tools.files
+$z=0
+Set-Location -Path "$PSScriptRoot/tools"
+Write-Output " ########### TOOLS MD5SUM CHECK ###########"
+Write-Output ""
+ForEach ($item in $mig_bundles)
+{
+$filename=$tools[$z].fileName
+$file_disc=$tools[$z].comments 
+$file_md5sum= Get-FileHash   "$filename"  -Algorithm MD5 2>&1
+    if ($file_md5sum -eq $Error[0])  ##check if file exists
+        {
+        Write-Host -Object "$file_disc ($filename) does not exist" -ForegroundColor yellow
+         Write-Output ""
+        }
+    else
+        {
+            $file_md5sum=$file_md5sum.Hash
+            $json_md5sum= $tools[$z].chkSum
+            if ($json_md5sum -eq $file_md5sum)
+                {
+                    Write-Host -Object "$file_disc ($filename) is GOOD" -ForegroundColor Green
+                    Write-Output ""
+                }
+            else
+                {
+                    Write-Host -Object "$file_disc ($filename) is NOT GOOD" -ForegroundColor Red
+                    Write-Output ""
+                }
+        }
+$z=$z+1
+}
  
 ##### MIGRATION BUNDLES ##########
 $mig_bundles=$json.migrationBundles.files
 $z=0
+Set-Location -Path "$PSScriptRoot/bundles"
+Write-Output " ########### MIGRATION BUNDLES MD5SUM CHECK ###########"
+Write-Output ""
 ForEach ($item in $mig_bundles)
 {
-$filename=$mig_bundles[$z].fileName 
+$filename=$mig_bundles[$z].fileName
 $file_disc=$mig_bundles[$z].comments 
-$file_md5sum= Get-FileHash   $filename  -Algorithm MD5 2>&1
+$file_md5sum= Get-FileHash   "$filename"  -Algorithm MD5 2>&1
     if ($file_md5sum -eq $Error[0])  ##check if file exists
         {
         Write-Host -Object "$file_disc ($filename) does not exist" -ForegroundColor yellow
@@ -47,6 +85,9 @@ $z=$z+1
 ##### COMMON BUNDLES ##########
 $common_bundles=$json.commonBundles.files
 $z=0
+Set-Location -Path "$PSScriptRoot/bundles"
+Write-Output " ########### COMMON BUNDLES MD5SUM CHECK ###########"
+Write-Output ""
 ForEach ($item in $common_bundles)
 {
 $filename=$common_bundles[$z].fileName 
@@ -68,7 +109,7 @@ $file_md5sum= Get-FileHash   $filename  -Algorithm MD5 2>&1
                     Write-Output ""
                 }
             else
-                {
+                {xz 
                     Write-Host -Object "$file_disc ($filename) is NOT GOOD" -ForegroundColor Red
                     Write-Output ""
                 }
@@ -83,6 +124,9 @@ if ($x -eq 1)
 {
 $vxrail_bundles=$json.vxrailBundles.files
 $z=0
+Set-Location -Path "$PSScriptRoot/bundles"
+Write-Output " ########### VXRAIL BUNDLES MD5SUM CHECK ###########"
+Write-Output ""
 ForEach ($item in $vxrail_bundles)
 {
 $filename=$vxrail_bundles[$z].fileName  
@@ -117,6 +161,9 @@ elseif ($x -eq 2)
 {
 $vsrn_bundles=$json.vsrnBundles.files
 $z=0
+Set-Location -Path "$PSScriptRoot/bundles"
+Write-Output " ########### VSRN Bundles MD5SUM CHECK ###########"
+Write-Output ""
 ForEach ($item in $vsrn_bundles)
 {
 $filename=$vsrn_bundles[$z].fileName 
